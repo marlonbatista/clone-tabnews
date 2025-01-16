@@ -1,4 +1,9 @@
-const status = (request, response) => {
+import database from "../../../../infra/database.js";
+
+const status = async (request, response) => {
+  const result = await database.query("SELECT 1 + 1 As sum;");
+  console.log(result.rows);
+
   response
     .status(200)
     .json({ chave: "alunos do curso.dev são acima da média" });
