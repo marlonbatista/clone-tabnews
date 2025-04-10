@@ -1,6 +1,10 @@
 import database from "infra/database";
+import orquestrator from "tests/orchestrator";
 
-beforeAll(cleanDataBase);
+beforeAll(async () => {
+  await orquestrator.waitForAllServices();
+  await cleanDataBase();
+});
 
 async function cleanDataBase() {
   await database.query("drop schema  public cascade; create schema public;");
@@ -20,7 +24,6 @@ test("POST to /api/v1/migrations should return 200", async () => {
   });
 
   const schemaCurrent = await getMigrationListCurrent();
-  console.log("Schema current: " + schemaCurrent);
 
   expect(response1.status).toBe(201);
 
