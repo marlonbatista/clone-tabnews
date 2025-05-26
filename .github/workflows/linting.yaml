@@ -4,7 +4,7 @@ on: pull_request
 
 jobs:
   jest:
-    name: Prettier
+    name: ESLint + Prettier
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,6 +13,11 @@ jobs:
         with:
           node-version: "lts/hydrogen"
 
-      - run: npm ci
+      - name: Cache node modules
+        run: npm ci
 
-      - run: npm run lint:prettier:check
+      - name: Run Prettier
+        run: npm run lint:prettier:check
+
+      - name: Run ESLint
+        run: npm run lint:eslint
