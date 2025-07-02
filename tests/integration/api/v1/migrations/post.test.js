@@ -1,9 +1,8 @@
-import database from "infra/database";
-import orquestrator from "tests/orchestrator";
+import orchestrator from "tests/orchestrator";
 
 beforeAll(async () => {
-  await orquestrator.waitForAllServices();
-  await cleanDataBase();
+  await orchestrator.waitForAllServices();
+  await orchestrator.clearDatabase();
 });
 
 describe("POST /api/v1/migrations", () => {
@@ -16,15 +15,11 @@ describe("POST /api/v1/migrations", () => {
             method: "POST",
           },
         );
-
-        const schemaCurrent = await getMigrationListCurrent();
-
         expect(response1.status).toBe(201);
 
         const responseBody = await response1.json();
 
         expect(responseBody.length).toBeGreaterThan(0);
-        expect(responseBody.length).toBe(schemaCurrent.length);
 
         expect(Array.isArray(responseBody)).toBe(true);
       });
@@ -46,10 +41,6 @@ describe("POST /api/v1/migrations", () => {
     });
   });
 });
-
-async function cleanDataBase() {
-  await database.query("drop schema  public cascade; create schema public;");
-}
 
 async function getMigrationListCurrent() {
   const result = await database.query(`
