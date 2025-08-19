@@ -24,9 +24,9 @@ export default function StatusPage() {
 
   return (
     <>
-      <h1>Status</h1>
+      <h1>Details of Database</h1>
       <div>Last Update at: {new Date(update_at).toLocaleString()}</div>
-      <div>Database: {database.version}</div>
+      <div>Database Version: {database.version}</div>
       <div>Max Connection: {database.max_connections}</div>
       <div>Opened Connection: {database.opened_connections}</div>
     </>
