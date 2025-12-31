@@ -34,3 +34,14 @@ export class MethodNotAllowedError extends BaseError {
     });
   }
 }
+
+export class ValidationError extends BaseError {
+  constructor(props) {
+    super({
+      name: "ValidationError",
+      message: props.message || "Input Invalid",
+      action: props.action || "Please check the data is valid.",
+      status_code: 400,
+    });
+  }
+}
