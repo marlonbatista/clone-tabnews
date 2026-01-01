@@ -34,3 +34,25 @@ export class MethodNotAllowedError extends BaseError {
     });
   }
 }
+
+export class ValidationError extends BaseError {
+  constructor(props) {
+    super({
+      name: "ValidationError",
+      message: props.message || "Input Invalid",
+      action: props.action || "Please check the data is valid.",
+      status_code: 400,
+    });
+  }
+}
+
+export class NotFoundError extends BaseError {
+  constructor(props) {
+    super({
+      name: "NotFoundError",
+      message: props.message || "Resource not found.",
+      action: props.action || "Please check the resource exists.",
+      status_code: 404,
+    });
+  }
+}

@@ -11,6 +11,19 @@ const eslintConfig = [
   ...compat.config({
     extends: ["eslint:recommended", "next"],
   }),
+  // Ignore Next build artifacts
+  {
+    ignores: [".next/**"],
+  },
+  // Apply Jest recommended rules to test files via compat.config
+  ...compat.config({
+    overrides: [
+      {
+        files: ["tests/**", "**/*.test.js", "**/*.spec.js"],
+        extends: ["plugin:jest/recommended"],
+      },
+    ],
+  }),
 ];
 
 export default eslintConfig;
