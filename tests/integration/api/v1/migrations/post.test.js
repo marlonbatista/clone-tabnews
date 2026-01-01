@@ -41,11 +41,3 @@ describe("POST /api/v1/migrations", () => {
     });
   });
 });
-
-async function getMigrationListCurrent() {
-  const result = await database.query(`
-    SELECT COUNT(*) AS total_migrations
-    FROM public.pgmigrations;`);
-
-  return result.rows[0].total_migrations;
-}
