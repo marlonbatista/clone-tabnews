@@ -45,3 +45,14 @@ export class ValidationError extends BaseError {
     });
   }
 }
+
+export class NotFoundError extends BaseError {
+  constructor(props) {
+    super({
+      name: "NotFoundError",
+      message: props.message || "Resource not found.",
+      action: props.action || "Please check the resource exists.",
+      status_code: 404,
+    });
+  }
+}
