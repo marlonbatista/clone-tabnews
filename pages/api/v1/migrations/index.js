@@ -18,6 +18,7 @@ async function getHandler(request, response) {
 
 async function postHandler(request, response) {
   return await migrator.listPendingMigrations(false).then((migrations) => {
+    console.log("Migrations applied:", migrations);
     const stateCode = migrations.length > 0 ? 201 : 200;
     return response.status(stateCode).json(migrations);
   });

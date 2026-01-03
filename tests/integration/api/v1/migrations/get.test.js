@@ -15,6 +15,7 @@ describe("GET /api/v1/migrations", () => {
       expect(response.status).toBe(200);
 
       const responseBody = await response.json();
+      console.log("response GET migrations:", responseBody);
 
       expect(process.env.NODE_ENV).toBe("test");
 
