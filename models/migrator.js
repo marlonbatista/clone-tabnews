@@ -1,30 +1,15 @@
 import migrationRunner from "node-pg-migrate";
-import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-import fs from "node:fs/promises";
+import { resolve } from "node:path";
 import database from "infra/database.js";
 
 async function migration(dbClient, dryRun) {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
-  const migrationsDir = resolve(__dirname, "..", "infra", "migrations");
-
-  try {
-    await fs.access(migrationsDir);
-  } catch (err) {
-    // If migrations directory is missing, don't throw a 500 — return empty list
-    if (err && err.code === "ENOENT") {
-      return [];
-    }
-    throw err;
-  }
-
   return await migrationRunner({
     dbClient,
     dryRun,
-    dir: migrationsDir,
+    dir: resolve("infra", "migrations"),
     direction: "up",
     log: () => {},
-    migrationsTable: "pgmigrations",
+    migrationsTable: "public.pgmigrations",
   });
 }
 
@@ -37,6 +22,7 @@ async function listPendingMigrations(dryRun) {
 
   await dbClient.end();
 
+  console.log("Pending migrations:", pendingMigrations);
   return pendingMigrations;
 }
 
