@@ -19,13 +19,13 @@ export default function StatusPage() {
     return <div>Erro ao carregar dados.</div>;
   }
 
-  const { update_at, dependencies } = data;
+  const { updated_at, dependencies } = data;
   const { database } = dependencies;
 
   return (
     <>
       <h1>Details of Database</h1>
-      <div>Last Update at: {new Date(update_at).toLocaleString()}</div>
+      <div>Last Update at: {new Date(updated_at).toLocaleString()}</div>
       <div>Database Version: {database.version}</div>
       <div>Max Connection: {database.max_connections}</div>
       <div>Opened Connection: {database.opened_connections}</div>
