@@ -22,7 +22,6 @@ async function listPendingMigrations(dryRun) {
 
   await dbClient.end();
 
-  console.log("Pending migrations:", pendingMigrations);
   return pendingMigrations;
 }
 
