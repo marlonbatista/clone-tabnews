@@ -1,8 +1,10 @@
 import database from "infra/database";
 import { ValidationError, NotFoundError } from "infra/errors/error.js";
+import password from "models/password";
 
 async function create(userInputValue) {
   await validateUser(userInputValue);
+  await hashPasswordInObject(userInputValue);
 
   const newUser = await runInserQuery(userInputValue);
 
@@ -100,9 +102,62 @@ async function validateUniqueUsername(username) {
   }
 }
 
+async function update(username, userInputValues) {
+  const currentUser = await findOneByUserName(username);
+
+  if ("username" in userInputValues) {
+    await validateUniqueUsername(userInputValues.username);
+  }
+
+  if ("email" in userInputValues) {
+    await validateUniqueEmail(userInputValues.email);
+  }
+
+  if ("password" in userInputValues) {
+    await hashPasswordInObject(userInputValues);
+  }
+
+  const userWithNewValues = { ...currentUser, ...userInputValues };
+
+  const updatedUser = await runUpdateQuery(userWithNewValues);
+
+  return updatedUser;
+}
+
+async function runUpdateQuery(userWithNewValues) {
+  const result = await database.query({
+    text: `
+        UPDATE 
+          users
+        SET 
+          username = $2,
+          email = $3,
+          password = $4,
+          updated_at = timezone('utc', now())
+        WHERE 
+          id = $1 
+        RETURNING *
+        ;`,
+    values: [
+      userWithNewValues.id,
+      userWithNewValues.username,
+      userWithNewValues.email,
+      userWithNewValues.password,
+    ],
+  });
+
+  return result.rows[0];
+}
+
+async function hashPasswordInObject(userInputValue) {
+  const hashedPassword = await password.hash(userInputValue.password);
+  userInputValue.password = hashedPassword;
+}
+
 const user = {
   create,
   findOneByUserName,
+  update,
 };
 
 export default user;
